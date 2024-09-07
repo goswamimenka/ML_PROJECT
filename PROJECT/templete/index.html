@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scaled=1.0">
+    <title>House Price Prediction </title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(246, 249, 251);
+
+        }
+        header{
+            background-color: #333;
+            color:#fff;
+            padding: 10px;
+            text-align: center;
+        };
+        main{
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0 , 0, 0.1);
+        }
+        footer{
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color:#fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        /* Add styling for the form */
+        form{
+            margin-top: 20px;
+        }
+
+        label{
+            display: block;
+            margin-bottom: 8px;      
+        }
+        select {
+            width: 100px;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+        button {
+            background-color:#333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>House price predication</h1>
+    </header>
+    <main>
+        <p>welcome to house price prediction</p>
+<form id="predicationForm">
+    <label for="beds">bedrooms:</label>
+    <select id="beds" name="beds">
+        <option value="" disabled selected>select number of bedrooms</option>
+        {% for bedrooms in bedroom %}
+           <option value="{{ bedroom }}">{{ beadroom }}</option>
+           {% endfor %}
+    </select>
+
+    <label for="baths">baths:</label>
+    <select id="baths" name="baths">
+        <option value="" disabled selected>select number of bedrooms</option>
+        {% for bedrooms in bedroom %}
+           <option value="{{ bathroom }}">{{ bathroom }}</option>
+           {% endfor %}
+    </select>
+
+    <label for="size">size:</label>
+    <select id="size" name="size">
+        <option value="" disabled selected>select number of house</option>
+        {% for house_size in sizes %}
+           <option value="{{ bathroom }}">{{ bathroom }}</option>
+           {% endfor %}
+    </select>
+    <label for="zip_code">zip_code:</label>
+    <select id="zip_code " name="zip_code">
+        <option value="" disabled selected>select number of house</option>
+        {% for house_size in sizes %}
+           <option value="{{ zip_code }}">{{ zip_code }}</option>
+           {% endfor %}
+    </select>
+    <button type="button" onclick="sendData()">predict price</button>
+    <div id="predicatedprice"></div>
+</form>
+    </main>
+    <footer>
+        <p>&copy; 2024 House price Prediction. All rights reserved.</p>
+    </footer>
+    <script>
+        function fetchOption(endpoint, dropdownTd) {
+            fetch(endpoint)
+            .then(Response => respose.json())
+            .then(data => {
+                const dropdown= document.getElementById(dropdownId);
+                dropdown.innerHTML = '<option value="" disabled selected >Select an option</option>'
+                data.forEach(option=>{
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    dropdown.appendChild(optionElement);
+                }); 
+            });
+        }
+        window.onload =function(){
+            fetchOptions('/bedrooms', 'beds');
+            fetchOptions('/bathrooms', 'baths');
+            fetchOptions('/sizes', 'sizes');
+            fetchOptions('/zip_code', 'zip_code');
+        };
+        function sendData(){
+            const from = document.getElementById('predictionfrom');
+            const formData =new FormData(form);
+
+            fetch('/predict',{
+                method:'POST',
+                body: formData
+            })
+            .then(respose =>respose.text())
+            .then(price =>{
+                document.getElementById("predictedPrice").innerHTML = "price: INR"+price;
+            });
+        }
+    </script>
+</body>
+</html>
